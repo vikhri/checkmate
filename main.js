@@ -2,8 +2,10 @@ import Slider from './slider';
 
 document.addEventListener('DOMContentLoaded', () => {
   let stepsSlider = null;
+  let playersSlider = null;
 
-  const initializeSlider = () => {
+  // Инициализация stepsSlider
+  const initializeStepsSlider = () => {
     if (window.innerWidth < 1200 && !stepsSlider) {
       stepsSlider = new Slider('feature-slider');
       stepsSlider.init();
@@ -13,14 +15,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  initializeSlider();
+  // Инициализация playersSlider
+  const initializePlayersSlider = () => {
+    if (!playersSlider) {
+      playersSlider = new Slider('players-slider');
+      playersSlider.setParameters(3, 20);
+      playersSlider.init();
+    }
+  };
 
+  // Инициализация слайдеров при загрузке
+  initializeStepsSlider();
+  initializePlayersSlider();
 
+  // Проверка при изменении размера окна
   window.addEventListener('resize', () => {
-    initializeSlider();
+    initializeStepsSlider();
 
     if (stepsSlider) {
       stepsSlider.updateSlidesPerView();
     }
+    if (playersSlider) {
+      playersSlider.updateSlidesPerView();
+    }
   });
 });
+
+
