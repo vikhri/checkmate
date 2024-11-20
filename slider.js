@@ -39,9 +39,11 @@ export default class Slider {
       this.slidesPerView = 2;
     }
     this.numberOfViews = Math.ceil(this.slides.length / this.slidesPerView);
-    this.updateSlideWidth(); // Обновляем ширину слайдов
-    this.updateCarousel();   // Обновляем положение слайдов
+    this.updateSlideWidth();
+    this.updatePages();// Обновляем ширину слайдов
+    this.updateSliderView()   // Обновляем положение слайдов
   }
+
 
   init() {
     this.updateSlidesPerView();
@@ -53,7 +55,27 @@ export default class Slider {
     this.prevButton.disabled = this.currentIndex === 0;
     this.nextButton.disabled = this.currentIndex === this.numberOfViews;
 
-    this.slides.forEach((_, index) => {
+    this.prevClickHandler = () => {
+      if (this.currentIndex > 0) {
+        this.currentIndex--;
+        this.updateSliderView();
+      }
+    };
+    this.nextClickHandler = () => {
+      if (this.currentIndex < this.numberOfViews) {
+        this.currentIndex++;
+        this.updateSliderView();
+      }
+    };
+
+    this.prevButton.addEventListener('click', this.prevClickHandler);
+    this.nextButton.addEventListener('click', this.nextClickHandler);
+  }
+
+  updatePages() {
+    // Пересчет страниц
+    this.pagesContainer.innerHTML = '';
+    for( let index = 0; index <= (this.slides.length - this.slidesPerView) ; index++ ) {
       const dot = document.createElement('button');
       dot.classList.add('pagination__dot');
       if (index === this.currentIndex) dot.classList.add('active');
@@ -62,29 +84,13 @@ export default class Slider {
 
       dot.addEventListener('click', () => {
         this.currentIndex = index;
-        this.updateCarousel();
+        this.updateSliderView();
       });
-    });
-
-    // Сохраняем обработчики для последующего удаления
-    this.prevClickHandler = () => {
-      if (this.currentIndex > 0) {
-        this.currentIndex--;
-        this.updateCarousel();
-      }
-    };
-    this.nextClickHandler = () => {
-      if (this.currentIndex < this.numberOfViews) {
-        this.currentIndex++;
-        this.updateCarousel();
-      }
-    };
-
-    this.prevButton.addEventListener('click', this.prevClickHandler);
-    this.nextButton.addEventListener('click', this.nextClickHandler);
+    }
   }
 
-  updateCarousel() {
+  updateSliderView() {
+    // движение слайда
     this.sliderContainer.style.transform = `translateX(-${this.currentIndex * (this.blockWidth + this.gap)}px)`;
 
     // Обновление активной точки

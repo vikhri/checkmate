@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeSlider();
 
     if (stepsSlider) {
-      stepsSlider.updateSlidesPerView(); // Обновляем slidesPerView
+      stepsSlider.updateSlidesPerView();
     }
   });
 });
