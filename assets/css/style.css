@@ -1,5 +1,6 @@
 :root {
   --text-color: #313131;
+  --text-color-light: #31313199 ;
   --button-color: #1F1F1F;
   --button-hover: #FBCE51;
   --button-light-color: #FFFFFFE6;
@@ -638,6 +639,7 @@ button:focus-visible {
   display: flex;
   position: relative;
   flex-direction: column;
+  overflow: hidden;
 
   @media screen and (max-width: 1200px) {
     overflow: hidden;
@@ -645,11 +647,13 @@ button:focus-visible {
 }
 
 .pagination {
-  display: none;
   column-gap: 16px;
   align-items: center;
   margin: 28px auto 0;
+}
 
+.steps .pagination  {
+  display: none;
   @media screen and (max-width: 1200px) {
     display: flex;
   }
@@ -692,6 +696,13 @@ button:focus-visible {
 .pages {
   display: flex;
   column-gap: 6px;
+  font-family: GolosText;
+  font-size: 16px;
+  color: var(--text-color);
+}
+
+.pages-count {
+  opacity: 60%;
 }
 
 .pagination__dot {
@@ -707,5 +718,80 @@ button:focus-visible {
 }
 
 
+.participants__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 60px;
+}
+
+.participants__list {
+  display: flex;
+  width: fit-content;
+  align-items: stretch;
+  column-gap: 0;
+  row-gap: 0;
+}
+
+.participants__list-item {
+  width: 100%;
+}
+
+.player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.player__img-wrapper {
+  width: 80%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  margin: 0 auto;
+  margin-bottom: 28px;
+}
+
+.player__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.player__name {
+  font-family: GolosText;
+  font-weight: 500;
+  font-size: 2.4rem;
+}
+
+.player__grade {
+  margin-bottom: 20px;
+  font-family: GolosText;
+  font-weight: 400;
+  font-size: 2rem;
+  color: var(--text-color-light);
+}
+
+.player__link {
+  max-height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  font-family: GolosText;
+  font-weight: 500;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--secondary-color);
+  border: 1px solid var(--secondary-color);
+  text-decoration: none;
+  border-radius: 62px;
+}
+
+.player__link:hover {
+  background-color: var(--secondary-color);
+  color: white;
+}
 
 
