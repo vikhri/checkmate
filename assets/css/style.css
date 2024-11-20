@@ -502,6 +502,7 @@ button:focus-visible {
     align-items: stretch;
     column-gap: 0;
     row-gap: 0;
+    margin-top: 148px;
 
     .steps__list-block:nth-of-type(1),
     .steps__list-block:nth-of-type(2),
@@ -516,6 +517,7 @@ button:focus-visible {
       padding: 62px 20px 34px;
     }
   }
+
 }
 
 .step {
@@ -539,7 +541,6 @@ button:focus-visible {
   font-family: GolosText;
   font-weight: 500;
   font-size: 2rem;
-
 }
 
 .step__count {
@@ -554,7 +555,6 @@ button:focus-visible {
   font-family: GolosText;
   font-weight: 600;
   font-size: 2rem;
-
 }
 
 .steps__list-block:nth-of-type(1) {
@@ -602,7 +602,12 @@ button:focus-visible {
   right: -5%;
 
   @media screen and (max-width: 1200px) {
-    display: none;
+    max-width: 335px;
+    width: 100%;
+    top: 3%;
+    left: 50%;
+    bottom: unset;
+    transform: translateX(-50%);
   }
 }
 
@@ -631,9 +636,76 @@ button:focus-visible {
 
 .slider {
   display: flex;
+  position: relative;
   flex-direction: column;
 
   @media screen and (max-width: 1200px) {
     overflow: hidden;
   }
 }
+
+.pagination {
+  display: none;
+  column-gap: 16px;
+  align-items: center;
+  margin: 28px auto 0;
+
+  @media screen and (max-width: 1200px) {
+    display: flex;
+  }
+}
+
+.pagination__button {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background-color: var(--button-color);
+  color: white;
+  cursor: pointer;
+}
+
+.pagination__button:disabled {
+  opacity: 20%;
+  cursor: initial;
+}
+
+.pagination__button:after {
+  position: relative;
+  display: block;
+  content: ' ';
+  width: 8px;
+  height: 14px;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='18' viewBox='0 0 10 18' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8.07664 15.923L1.15357 8.9999L8.07664 2.07682' stroke='white' stroke-width='1.63636' stroke-linecap='square'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.pagination__button.next {
+  transform: scale(-1);
+}
+
+.pages {
+  display: flex;
+  column-gap: 6px;
+}
+
+.pagination__dot {
+  width: 10px;
+  height: 10px;
+  border: none;
+  border-radius: 50%;
+  background-color: #D9D9D9;
+}
+
+.pagination__dot.active {
+  background-color: var(--button-color);
+}
+
+
+
+
