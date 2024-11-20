@@ -33,10 +33,12 @@ export default class Slider {
   }
 
   updateSlidesPerView() {
+    const initialSlidesPerView = this.slidesPerView;
+
     if (window.innerWidth < 768) {
       this.slidesPerView = 1; // Устанавливаем 1 слайд на экран для узких экранов
     } else {
-      this.slidesPerView = 2;
+      this.slidesPerView = initialSlidesPerView;
     }
     this.numberOfViews = Math.ceil(this.slides.length / this.slidesPerView);
     this.updateSlideWidth();
@@ -94,7 +96,7 @@ export default class Slider {
     this.sliderContainer.style.transform = `translateX(-${this.currentIndex * (this.blockWidth + this.gap)}px)`;
 
     // Обновление активной точки
-    document.querySelectorAll('.pagination__dot').forEach((dot, index) => {
+    this.slider.querySelectorAll('.pagination__dot').forEach((dot, index) => {
       dot.classList.toggle('active', index === this.currentIndex);
     });
 
