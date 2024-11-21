@@ -55,15 +55,18 @@ export default class Slider {
     }
   }
 
-  autoSlideSwitchingOn() {
-    this.autoInterval = setInterval(() => {
-      this.moveTo(this.currentIndex + 1);
-    }, this.config.switchingInterval);
+  autoSwipingOn() {
+    if (!this.autoInterval) {
+      this.autoInterval = setInterval(() => {
+        this.moveTo(this.currentIndex + 1);
+      }, this.config.switchingInterval);
+    }
   }
 
-  autoSlideSwitchingOff() {
+  autoSwipingOff() {
     if(this.autoInterval) {
       clearInterval(this.autoInterval);
+      this.autoInterval = null;
     }
   }
 
@@ -77,18 +80,27 @@ export default class Slider {
     }
 
     if(this.config.auto === true) {
-      this.autoSlideSwitchingOn();
+      this.autoSwipingOn();
     }
 
     if(!this.config.dots) {
       this.pagesCount.textContent = this.slides.length.toString();
     }
 
+    // Navigation button click handlers
     this.prevClickHandler = () => this.moveTo(this.currentIndex - 1)
     this.nextClickHandler = () => this.moveTo(this.currentIndex + 1)
 
     this.prevButton.addEventListener('click', this.prevClickHandler);
     this.nextButton.addEventListener('click', this.nextClickHandler);
+
+
+    // // Stop autoswiping while mouse is above the slider
+    // this.mouseEnterHandler = () => this.autoSwipingOff();
+    // this.mouseLeaveHandler = () => this.autoSwipingOn();
+    //
+    // this.slider.addEventListener('mouseenter', this.mouseEnterHandler);
+    // this.slider.addEventListener('mouseleave', this.mouseLeaveHandler);
   }
 
   updatePagesCount() {
