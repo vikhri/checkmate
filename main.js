@@ -16,7 +16,7 @@ const playersSliderConfig = {
   ],
   loop: true,
   auto: true,
-  switchingInterval: 2000,
+  switchingInterval: 4000,
 };
 
 
