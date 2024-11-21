@@ -68,6 +68,7 @@ body {
   border: 2px solid var(--border-color);
   background-color: var(--bg-color);
   text-decoration: none;
+  transition: all 0.4s ease-in-out;
 
   .button__text {
     min-width: 165px;
@@ -796,7 +797,7 @@ button:focus-visible {
 
 .slider-container.active.animate {
   display: flex;
-  transition: transform 0.4s ease-in-out;
+  transition: transform 0.8s ease-in-out;
 }
 
 .slider-container.active {
