@@ -183,5 +183,6 @@ export default class Slider {
 
     // Remove container styles
     this.sliderContainer.classList.remove('active');
+    this.sliderContainer.style.transform = "none";
   }
 }
