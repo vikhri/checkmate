@@ -66,7 +66,9 @@ export default class Slider {
     this.updateSlidesPerView();
     this.addClones()
 
-    this.pagesCount.textContent = this.slides.length + '';
+    if(!this.config.dots) {
+      this.pagesCount.textContent = this.slides.length + '';
+    }
 
     this.sliderContainer.style.display = 'flex';
     this.sliderContainer.style.transition = 'transform 0.3s ease-in-out';
