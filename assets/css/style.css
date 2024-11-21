@@ -81,10 +81,16 @@ button:focus-visible {
   outline: 4px auto var(--button-hover);
 }
 
-.logo {
+.logo-wrapper {
+  display: block;
   width: 245px;
   height: 36px;
-  object-fit: contain;
+
+  svg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 
   @media screen and (max-width: 576px) {
     width: 213px;
@@ -191,6 +197,7 @@ button:focus-visible {
   --border-color: var(--button-color);
   --bg-color: var(--button-color);
   --text-color: #FFFFFF;
+  --hover-color: var(--button-hover);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -228,6 +235,7 @@ button:focus-visible {
 .button--secondary {
   --bg-color: transparent;
   --text-color: var(--button-color);
+  --hover-color: var(--button-color);
 
   @media screen and (max-width: 768px){
     --bg-color: var(--button-light-color);
@@ -236,14 +244,14 @@ button:focus-visible {
 }
 
 .button:hover {
-  --border-color: var(--button-hover);
-  --bg-color: var(--button-hover);
+  --border-color: var(--hover-color);
+  --bg-color: var(--hover-color);
   --text-color: var(--button-color);
 }
 
 .button--secondary:hover {
-  --border-color: var(--button-color);
-  --bg-color: var(--button-color);
+  /*--border-color: var(--button-color);*/
+  /*--bg-color: var(--button-color);*/
   --text-color: #FFFFFF;
 }
 
@@ -862,4 +870,45 @@ button:focus-visible {
   font-family: GolosText;
   font-size: 1.6rem;
   color: var(--text-color-light);
+}
+
+
+#logo .horse {
+  animation: none; /* Убираем анимацию в состоянии по умолчанию */
+}
+
+#logo:hover .horse {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+#logo .horse:nth-of-type(2) {
+  animation-delay: 100ms;
+}
+#logo .horse:nth-of-type(3) {
+  animation-delay: 200ms;
+}
+#logo .horse:nth-of-type(4) {
+  animation-delay: 300ms;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+
+.btn-fill {
+  transition: 0.3s;
+}
+
+.btn-fill:hover {
+  background: transparent;
+  box-shadow: inset 0 0 0 50px var(--hover-color);
 }
