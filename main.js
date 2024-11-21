@@ -13,6 +13,7 @@ const playersSliderConfig = {
     { width: 768, slidesPerView: 2 },
     { width: 1200, slidesPerView: 3 },
   ],
+  loop: true
 };
 
 
@@ -21,10 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
   let playersSlider = null;
 
   const initializeStepsSlider = () => {
-    if (window.innerWidth < 1200 && !stepsSlider) {
+    if (window.innerWidth <= 1200 && !stepsSlider) {
       stepsSlider = new Slider('feature-slider', featureSliderConfig);
       stepsSlider.init();
-    } else if (window.innerWidth >= 1200 && stepsSlider) {
+    } else if (window.innerWidth > 1200 && stepsSlider) {
       stepsSlider.destroy();
       stepsSlider = null;
     }
@@ -32,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const initializePlayersSlider = () => {
     if (!playersSlider) {
-      playersSlider = new Slider('players-slider', playersSliderConfig);
+      playersSlider = new Slider('players-slider', playersSliderConfig, true);
       playersSlider.init();
     } else {
       playersSlider.updateSlidesPerView();
