@@ -791,6 +791,15 @@ button:focus-visible {
   flex-direction: column;
 }
 
+.slider-container.active.animate {
+  display: flex;
+  transition: transform 0.4s ease-in-out;
+}
+
+.slider-container.active {
+  transition: none;
+}
+
 .pagination {
   display: flex;
   column-gap: 16px;

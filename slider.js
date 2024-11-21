@@ -7,7 +7,7 @@ export default class Slider {
     this.slides = [...this.slider.querySelectorAll('.slide')];
     this.slidesPerView = 2;
     this.gap = 20;
-    this.numberOfViews = this.slides.length - this.slidesPerView + 1;
+    this.autoInterval = null;
     this.prevButton = this.slider.querySelector('.pagination__button.prev');
     this.nextButton = this.slider.querySelector('.pagination__button.next');
     this.pagesContainer = this.slider.querySelector('.pages');
@@ -16,20 +16,14 @@ export default class Slider {
     this.currentIndex = 0;
     this.blockWidth = 0;
 
-    // Ссылки на обработчики событий
+    // Event Listeners Links
     this.prevClickHandler = null;
     this.nextClickHandler = null;
-  }
-
-  setParameters(slidesPerView, gap) {
-    this.gap = gap;
-    this.slidesPerView = slidesPerView;
   }
 
   updateSlideWidth() {
     this.blockWidth = (this.slider.offsetWidth - ((this.slidesPerView - 1) * this.gap)) / this.slidesPerView;
 
-    // Обновляем ширину каждого слайда
     [...this.slider.querySelectorAll('.slide')].forEach((block) => {
       block.style.width = `${this.blockWidth}px`;
       block.style.marginRight = `${this.gap}px`;
@@ -42,19 +36,18 @@ export default class Slider {
     const matchingBreakpoint = breakpoints.find((bp) => window.innerWidth < bp.width) || breakpoints[breakpoints.length - 1];
 
     this.slidesPerView = matchingBreakpoint.slidesPerView;
-    this.numberOfViews = this.slides.length - this.slidesPerView + 1;
 
     this.updateSlideWidth();
-    this.updatePages();
-    this.updateSliderView();
+    this.updatePagesCount();
+    this.swipeSlide();
   }
 
   addClones() {
-    if (this.loop && !this.clonesAdded) {
+    // add clones for loop
+    if (!this.clonesAdded) {
       const firstClones = this.slides.slice(0, this.slidesPerView).map((slide) => slide.cloneNode(true));
       const lastClones = this.slides.slice(-this.slidesPerView).map((slide) => slide.cloneNode(true));
 
-      // Добавляем клоны
       firstClones.forEach((clone) => this.sliderContainer.appendChild(clone));
       lastClones.forEach((clone) => this.sliderContainer.insertBefore(clone, this.slides[0]));
 
@@ -62,42 +55,43 @@ export default class Slider {
     }
   }
 
-  autoSlideSwitching() {
+  autoSlideSwitchingOn() {
+    this.autoInterval = setInterval(() => {
+      this.moveTo(this.currentIndex + 1);
+    }, this.config.switchingInterval);
+  }
 
-    if(this.config.auto === true) {
-      setInterval(() => {
-        this.moveTo(this.currentIndex + 1);
-      }, this.config.switchingInterval)
+  autoSlideSwitchingOff() {
+    if(this.autoInterval) {
+      clearInterval(this.autoInterval);
     }
-
   }
 
   init() {
+    this.sliderContainer.classList.add('active');
     this.updateSlidesPerView();
-    this.addClones()
 
-    this.autoSlideSwitching();
-
-    if(!this.config.dots) {
-      this.pagesCount.textContent = this.slides.length + '';
+    if(this.loop) {
+      this.addClones()
+      this.moveTo(this.slidesPerView, false);
     }
 
-    this.sliderContainer.style.display = 'flex';
-    this.sliderContainer.style.transition = 'transform 0.4s ease-in-out';
+    if(this.config.auto === true) {
+      this.autoSlideSwitchingOn();
+    }
 
-    this.prevClickHandler = () => this.moveTo(this.currentIndex - 1);
-    this.nextClickHandler = () => this.moveTo(this.currentIndex + 1);
+    if(!this.config.dots) {
+      this.pagesCount.textContent = this.slides.length.toString();
+    }
+
+    this.prevClickHandler = () => this.moveTo(this.currentIndex - 1)
+    this.nextClickHandler = () => this.moveTo(this.currentIndex + 1)
 
     this.prevButton.addEventListener('click', this.prevClickHandler);
     this.nextButton.addEventListener('click', this.nextClickHandler);
-
-    if (this.loop) {
-      this.moveTo(this.slidesPerView, false);
-    }
   }
 
-  updatePages() {
-    // Пересчет страниц
+  updatePagesCount() {
     if(this.config.dots) {
       this.pagesContainer.innerHTML = '';
       for( let index = 0; index <= (this.slides.length - this.slidesPerView); index++ ) {
@@ -109,12 +103,12 @@ export default class Slider {
 
         dot.addEventListener('click', () => {
           this.currentIndex = index;
-          this.updateSliderView();
+          this.swipeSlide();
         });
       }
     } else {
       if(!this.config.dots) {
-        this.currentPage.textContent = this.currentIndex + ''
+        this.currentPage.textContent = this.currentIndex.toString()
       }
     }
   }
@@ -123,13 +117,13 @@ export default class Slider {
     if (this.loop) {
       if (index < 0) {
         this.currentIndex = this.slides.length - 1;
-        this.updateSliderView(false); // Без анимации
+        this.swipeSlide(false); // Без анимации
         setTimeout(() => this.moveTo(this.currentIndex - 1), 0); // Переход назад
         return;
       }
       if (index > this.slides.length) {
         this.currentIndex = 0;
-        this.updateSliderView(false); // Без анимации
+        this.swipeSlide(false); // Без анимации
         setTimeout(() => this.moveTo(this.currentIndex + 1), 0); // Переход вперед
         return;
       }
@@ -138,52 +132,44 @@ export default class Slider {
     }
 
     this.currentIndex = index;
-    this.updatePages();
-    this.updateSliderView(withAnimation);
+    this.updatePagesCount();
+    this.swipeSlide(withAnimation);
   }
 
-  updateSliderView(withAnimation = true) {
+  swipeSlide(withAnimation = true) {
     const offset = -this.currentIndex * (this.blockWidth + this.gap);
 
     if (!withAnimation) {
-      this.sliderContainer.style.transition = 'none';
+      this.sliderContainer.classList.remove('animate')
     } else {
-      this.sliderContainer.style.transition = 'transform 0.3s ease-in-out';
+      this.sliderContainer.classList.add('animate')
     }
 
     this.sliderContainer.style.transform = `translateX(${offset}px)`;
 
-    this.slider.querySelectorAll('.pagination__dot').forEach((dot, index) => {
-      dot.classList.toggle('active', index === this.currentIndex);
-    });
-
-    // Если цикличный режим, управляем видимостью кнопок
     if (!this.loop) {
       this.prevButton.disabled = this.currentIndex === 0;
       this.nextButton.disabled = this.currentIndex >= this.slides.length - this.slidesPerView;
     }
   }
 
-
   destroy() {
-    // Удаляем обработчики событий
+    // Remove Event Listeners
     this.prevButton.removeEventListener('click', this.prevClickHandler);
     this.nextButton.removeEventListener('click', this.nextClickHandler);
 
-    // Удаляем точки пагинации
+    // Remove pagination dots
     while (this.pagesContainer.firstChild) {
       this.pagesContainer.removeChild(this.pagesContainer.firstChild);
     }
 
-    // Сбрасываем стили слайдов
+    // Remove slider styles
     this.slides.forEach((block) => {
       block.style.width = '';
       block.style.marginRight = '';
     });
 
-    // Сбрасываем стили контейнера
-    this.sliderContainer.style.display = '';
-    this.sliderContainer.style.transition = '';
-    this.sliderContainer.style.transform = '';
+    // Remove container styles
+    this.sliderContainer.classList.remove('active');
   }
 }
