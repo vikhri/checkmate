@@ -1,11 +1,12 @@
 export default class Slider {
-  constructor(sliderSelector) {
+  constructor(sliderSelector, config) {
+    this.config = config;
     this.slider = document.getElementById(sliderSelector);
     this.sliderContainer = this.slider.querySelector('.slider-container');
     this.slides = this.slider.querySelectorAll('.slide');
     this.slidesPerView = 2;
     this.gap = 20;
-    this.numberOfViews = Math.ceil(this.slides.length / this.slidesPerView);
+    this.numberOfViews = this.slides.length - this.slidesPerView + 1;
     this.prevButton = this.slider.querySelector('.pagination__button.prev');
     this.nextButton = this.slider.querySelector('.pagination__button.next');
     this.pagesContainer = this.slider.querySelector('.pages');
@@ -33,17 +34,16 @@ export default class Slider {
   }
 
   updateSlidesPerView() {
-    const initialSlidesPerView = this.slidesPerView;
+    const breakpoints = this.config.breakpoints;
 
-    if (window.innerWidth < 768) {
-      this.slidesPerView = 1; // Устанавливаем 1 слайд на экран для узких экранов
-    } else {
-      this.slidesPerView = initialSlidesPerView;
-    }
-    this.numberOfViews = Math.ceil(this.slides.length / this.slidesPerView);
+    const matchingBreakpoint = breakpoints.find((bp) => window.innerWidth < bp.width) || breakpoints[breakpoints.length - 1];
+
+    this.slidesPerView = matchingBreakpoint.slidesPerView;
+    this.numberOfViews = this.slides.length - this.slidesPerView + 1;
+
     this.updateSlideWidth();
-    this.updatePages();// Обновляем ширину слайдов
-    this.updateSliderView()   // Обновляем положение слайдов
+    this.updatePages();
+    this.updateSliderView();
   }
 
 
@@ -67,6 +67,7 @@ export default class Slider {
       if (this.currentIndex < this.numberOfViews) {
         this.currentIndex++;
         this.updateSliderView();
+        console.log(this.currentIndex, this.numberOfViews);
       }
     };
 
@@ -77,7 +78,7 @@ export default class Slider {
   updatePages() {
     // Пересчет страниц
     this.pagesContainer.innerHTML = '';
-    for( let index = 0; index <= (this.slides.length - this.slidesPerView) ; index++ ) {
+    for( let index = 0; index <= (this.slides.length - this.slidesPerView); index++ ) {
       const dot = document.createElement('button');
       dot.classList.add('pagination__dot');
       if (index === this.currentIndex) dot.classList.add('active');
