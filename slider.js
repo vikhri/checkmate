@@ -1,7 +1,7 @@
 export default class Slider {
-  constructor(sliderSelector, config, loop = false) {
+  constructor(sliderSelector, config) {
     this.config = config;
-    this.loop = loop;
+    this.loop = config.loop;
     this.slider = document.getElementById(sliderSelector);
     this.sliderContainer = this.slider.querySelector('.slider-container');
     this.slides = [...this.slider.querySelectorAll('.slide')];
@@ -11,6 +11,8 @@ export default class Slider {
     this.prevButton = this.slider.querySelector('.pagination__button.prev');
     this.nextButton = this.slider.querySelector('.pagination__button.next');
     this.pagesContainer = this.slider.querySelector('.pages');
+    this.currentPage = this.slider.querySelector('.current-page');
+    this.pagesCount = this.slider.querySelector('.pages-count');
     this.currentIndex = 0;
     this.blockWidth = 0;
 
@@ -24,12 +26,11 @@ export default class Slider {
     this.slidesPerView = slidesPerView;
   }
 
-
   updateSlideWidth() {
     this.blockWidth = (this.slider.offsetWidth - ((this.slidesPerView - 1) * this.gap)) / this.slidesPerView;
 
     // Обновляем ширину каждого слайда
-    this.slides.forEach((block) => {
+    [...this.slider.querySelectorAll('.slide')].forEach((block) => {
       block.style.width = `${this.blockWidth}px`;
       block.style.marginRight = `${this.gap}px`;
     });
@@ -65,6 +66,8 @@ export default class Slider {
     this.updateSlidesPerView();
     this.addClones()
 
+    this.pagesCount.textContent = this.slides.length + '';
+
     this.sliderContainer.style.display = 'flex';
     this.sliderContainer.style.transition = 'transform 0.3s ease-in-out';
 
@@ -81,36 +84,26 @@ export default class Slider {
 
   updatePages() {
     // Пересчет страниц
-    this.pagesContainer.innerHTML = '';
-    for( let index = 0; index <= (this.slides.length - this.slidesPerView); index++ ) {
-      const dot = document.createElement('button');
-      dot.classList.add('pagination__dot');
-      if (index === this.currentIndex) dot.classList.add('active');
-      dot.dataset.index = index;
-      this.pagesContainer.appendChild(dot);
+    if(this.config.dots) {
+      this.pagesContainer.innerHTML = '';
+      for( let index = 0; index <= (this.slides.length - this.slidesPerView); index++ ) {
+        const dot = document.createElement('button');
+        dot.classList.add('pagination__dot');
+        if (index === this.currentIndex) dot.classList.add('active');
+        dot.dataset.index = index;
+        this.pagesContainer.appendChild(dot);
 
-      dot.addEventListener('click', () => {
-        this.currentIndex = index;
-        this.updateSliderView();
-      });
+        dot.addEventListener('click', () => {
+          this.currentIndex = index;
+          this.updateSliderView();
+        });
+      }
+    } else {
+      this.currentPage.textContent = this.currentIndex + ''
     }
   }
 
-  // updateSliderView() {
-  //   // движение слайда
-  //   this.sliderContainer.style.transform = `translateX(-${this.currentIndex * (this.blockWidth + this.gap)}px)`;
-  //   // Обновление активной точки
-  //   this.slider.querySelectorAll('.pagination__dot').forEach((dot, index) => {
-  //     dot.classList.toggle('active', index === this.currentIndex);
-  //   });
-  //   // Управление доступностью кнопок
-  //   this.prevButton.disabled = this.currentIndex === 0;
-  //   this.nextButton.disabled = this.currentIndex >= this.slides.length - this.slidesPerView;
-  // }
-
   moveTo(index, withAnimation = true) {
-    console.log(index, this.currentIndex)
-
     if (this.loop) {
       if (index < 0) {
         this.currentIndex = this.slides.length - 1;
@@ -129,6 +122,7 @@ export default class Slider {
     }
 
     this.currentIndex = index;
+    this.updatePages();
     this.updateSliderView(withAnimation);
   }
 

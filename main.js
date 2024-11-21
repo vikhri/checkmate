@@ -5,6 +5,7 @@ const featureSliderConfig = {
     { width: 768, slidesPerView: 1 },
     { width: 1200, slidesPerView: 2 },
   ],
+  dots: true,
 };
 
 const playersSliderConfig = {
