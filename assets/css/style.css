@@ -650,6 +650,7 @@ button:focus-visible {
 }
 
 .player {
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -682,6 +683,7 @@ button:focus-visible {
 }
 
 .player__grade {
+  flex-grow: 1;
   margin-bottom: 20px;
   font-family: GolosText;
   font-weight: 400;
@@ -690,6 +692,7 @@ button:focus-visible {
 }
 
 .player__link {
+  margin-top: auto;
   max-height: 35px;
   display: flex;
   align-items: center;
