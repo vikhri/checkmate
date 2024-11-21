@@ -7,6 +7,7 @@
   --accent-color: #F54932;
   --line-color: #D0D0D0;
   --secondary-color: #3057A2;
+  --footer-bg: #E9DED4;
   font-size: 10px;
 }
 
@@ -56,10 +57,6 @@
   padding: 0;
 }
 
-body {
-  overflow-x: hidden;
-}
-
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -82,12 +79,6 @@ body {
 button:focus,
 button:focus-visible {
   outline: 4px auto var(--button-hover);
-}
-
-.page {
-  display: flex;
-  flex-direction: column;
-  row-gap: 100px;
 }
 
 .logo {
@@ -120,6 +111,7 @@ button:focus-visible {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+
 
   @media screen and (max-width: 576px) {
     min-height: 812px;
@@ -270,6 +262,10 @@ button:focus-visible {
   }
 }
 
+.running-line__wrapper {
+  overflow: hidden;
+}
+
 .running-line__container {
   display: flex;
   animation: marquee 25s linear infinite;
@@ -310,6 +306,16 @@ button:focus-visible {
 
 
 /* SUPPORT */
+
+.support {
+  margin-top: 80px;
+  margin-bottom: 200px;
+
+  @media screen and (max-width: 768px) {
+    margin-bottom: 120px;
+    margin-top: 48px;
+  }
+}
 
 .support__header {
   display: flex;
@@ -479,7 +485,15 @@ button:focus-visible {
 /* STEPS */
 
 .steps {
-  overflow: hidden;
+  margin-bottom: 200px;
+
+  @media screen and (max-width: 1200px){
+    overflow: hidden;
+  }
+
+  @media screen and (max-width: 768px) {
+    margin-bottom: 120px;
+  }
 }
 
 .steps__subtitle {
@@ -606,7 +620,7 @@ button:focus-visible {
 
 .steps__img-wrap {
   position: absolute;
-  width: 32%;
+  width: 31%;
   bottom: -3%;
   right: -5%;
 
@@ -728,6 +742,11 @@ button:focus-visible {
 
 .participants {
   overflow: hidden;
+  margin-bottom: 140px;
+
+  @media screen and (max-width: 768px) {
+    margin-bottom: 100px;
+  }
 }
 
 .participants__header {
@@ -828,4 +847,19 @@ button:focus-visible {
   color: white;
 }
 
+.footer {
+  display: flex;
+  width: 100%;
+  padding: 40px 0 72px;
+  background-color: var(--footer-bg);
 
+  @media screen and (max-width: 576px) {
+    padding: 40px 0 60px;
+  }
+}
+
+.footer__text {
+  font-family: GolosText;
+  font-size: 1.6rem;
+  color: var(--text-color-light);
+}
