@@ -47,6 +47,10 @@
   }
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: #FFFFFF;
   color: var(--text-color);
