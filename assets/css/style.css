@@ -478,6 +478,10 @@ button:focus-visible {
 
 /* STEPS */
 
+.steps {
+  overflow: hidden;
+}
+
 .steps__subtitle {
   display: inline-block;
   font-family: GolosText;
@@ -485,6 +489,10 @@ button:focus-visible {
   max-width: 280px;
   text-transform: none;
   color: var(--secondary-color);
+
+  @media screen and (max-width: 1200px) {
+    font-size: 1.8rem;
+  }
 }
 
 .steps__list {
@@ -639,14 +647,15 @@ button:focus-visible {
   display: flex;
   position: relative;
   flex-direction: column;
-  overflow: hidden;
+  /*overflow-x: hidden;*/
 
-  @media screen and (max-width: 1200px) {
-    overflow: hidden;
-  }
+  /*@media screen and (max-width: 1200px) {*/
+  /*  overflow-x: hidden;*/
+  /*}*/
 }
 
 .pagination {
+  display: flex;
   column-gap: 16px;
   align-items: center;
   margin: 28px auto 0;
@@ -717,6 +726,9 @@ button:focus-visible {
   background-color: var(--button-color);
 }
 
+.participants {
+  overflow: hidden;
+}
 
 .participants__header {
   display: flex;
@@ -737,6 +749,24 @@ button:focus-visible {
   width: 100%;
 }
 
+.participants__pagination {
+  position: absolute;
+  right: 0;
+  top: -140px;
+
+  .pages {
+    min-width: 40px;
+  }
+
+  @media screen and (max-width: 1200px) {
+    top: -128px;
+  }
+
+  @media screen and (max-width: 768px) {
+    position: static;
+  }
+}
+
 .player {
   display: flex;
   flex-direction: column;
@@ -751,12 +781,16 @@ button:focus-visible {
   border-radius: 50%;
   margin: 0 auto;
   margin-bottom: 28px;
+
+  @media screen and (max-width: 576px) {
+    max-width: 244px;
+  }
 }
 
 .player__img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .player__name {
