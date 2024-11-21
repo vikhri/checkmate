@@ -864,7 +864,7 @@ button:focus-visible {
 }
 
 
-#prop {
+#propeller {
   animation: rotation 1s infinite linear;
   transform-origin: 15% 46%;
 }
