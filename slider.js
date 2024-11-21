@@ -62,16 +62,28 @@ export default class Slider {
     }
   }
 
+  autoSlideSwitching() {
+
+    if(this.config.auto === true) {
+      setInterval(() => {
+        this.moveTo(this.currentIndex + 1);
+      }, this.config.switchingInterval)
+    }
+
+  }
+
   init() {
     this.updateSlidesPerView();
     this.addClones()
+
+    this.autoSlideSwitching();
 
     if(!this.config.dots) {
       this.pagesCount.textContent = this.slides.length + '';
     }
 
     this.sliderContainer.style.display = 'flex';
-    this.sliderContainer.style.transition = 'transform 0.3s ease-in-out';
+    this.sliderContainer.style.transition = 'transform 0.4s ease-in-out';
 
     this.prevClickHandler = () => this.moveTo(this.currentIndex - 1);
     this.nextClickHandler = () => this.moveTo(this.currentIndex + 1);
@@ -101,7 +113,9 @@ export default class Slider {
         });
       }
     } else {
-      this.currentPage.textContent = this.currentIndex + ''
+      if(!this.config.dots) {
+        this.currentPage.textContent = this.currentIndex + ''
+      }
     }
   }
 
