@@ -371,6 +371,10 @@ button:focus-visible {
 
   @media screen and (max-width: 768px) {
     width: 100%;
+    transform: scale(1) translateY(-4%);
+  }
+
+  @media screen and (max-width: 576px) {
     transform: scale(1.1) translateY(-5%);
   }
 }
@@ -402,7 +406,7 @@ button:focus-visible {
   color: var(--text-color);
 
   .support__detail-key {
-    opacity: 70%;
+    color: var(--text-color-light);
     padding: 14px 16px 16px 0;
 
     @media screen and (max-width: 1200px) {

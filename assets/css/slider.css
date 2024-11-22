@@ -90,7 +90,7 @@
 }
 
 .pages-count {
-  opacity: 60%;
+  color: var(--text-color-light);
 }
 
 .pagination__dot {
