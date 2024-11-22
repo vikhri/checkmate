@@ -123,11 +123,6 @@ body {
   --text-color: #FFFFFF;
 }
 
-button:focus,
-button:focus-visible {
-  outline: 4px auto var(--button-hover);
-}
-
 /* LOGO */
 
 .logo-wrapper {
@@ -804,6 +799,8 @@ button:focus-visible {
 .running-line__container {
   display: flex;
   animation: marquee 25s linear infinite;
+  will-change: transform;
+  min-width: 100vw;
 }
 
 .running-line__text {
