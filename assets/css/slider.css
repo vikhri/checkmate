@@ -6,13 +6,16 @@
   flex-direction: column;
 }
 
-.slider-container.active.animate {
-  display: flex;
+.slider-container.animate {
   transition: transform 0.8s ease-in-out;
 }
 
-.slider-container.active {
+.slider-container {
   transition: none;
+}
+
+.slider-container.active {
+  display: flex;
 }
 
 .pagination {
@@ -48,8 +51,13 @@
   }
 }
 
+.pagination__button:hover {
+  background-color: var(--button-hover);
+}
+
 .pagination__button:disabled {
   opacity: 20%;
+  background-color: var(--button-color);
   cursor: initial;
 }
 
