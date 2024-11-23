@@ -16,6 +16,7 @@ export default class Slider {
     this.currentIndex = 1;
     this.currentPageNumber = 1;
     this.blockWidth = 0;
+    this.autoSwipingTimeout = null;
 
     // Event Listeners Links
     this.prevClickHandler = null;
@@ -56,6 +57,23 @@ export default class Slider {
     }
   }
 
+  startAutoSwiping() {
+    // setInterval(() => {
+    //   this.goToNext();
+    // }, this.config.switchingInterval);
+
+    this.autoSwipingTimeout = setTimeout(() => {
+      this.gotoNextInterval();
+    }, this.config.switchingInterval);
+
+  }
+
+  gotoNextInterval() {
+    clearTimeout(this.autoSwipingTimeout);
+    this.goToNext();
+    setTimeout(() => {this.gotoNextInterval()}, this.config.switchingInterval);
+  }
+
   goToNext() {
     this.moveTo(this.currentIndex + 1);
     this.currentPageNumber += 1;
@@ -78,11 +96,11 @@ export default class Slider {
 
     if(this.loop) {
       this.addClones()
-      this.moveTo(this.slidesPerView, false);
+      this.moveTo(3, false);
     }
 
     if(this.config.auto === true) {
-      this.autoSwipingOn();
+      this.startAutoSwiping();
     }
 
     if(!this.config.dots) {
@@ -125,12 +143,17 @@ export default class Slider {
 
   moveTo(index) {
 
+    this.currentIndex = index;
+    this.updatePagesCount();
+    this.swipeSlide();
+
+
     if(this.loop) {
       const clonesCount = [...this.slider.querySelectorAll('.slide')].length;
-      const lastIndex = clonesCount - this.slidesPerView;
+      const lastIndex = clonesCount - this.slidesPerView - 1;
       const firstIndex = this.slidesPerView
 
-      if (index < 0) {
+      if (index === -1) {
         this.currentIndex = this.slides.length;
         this.swipeSlide(false);
         setTimeout(() => {
@@ -140,20 +163,20 @@ export default class Slider {
         return;
       }
 
-      if (index >= lastIndex) {
-        this.currentIndex = firstIndex - 1;
-        this.swipeSlide(false);
-        setTimeout(() => {
-          this.currentIndex = firstIndex;
-          this.swipeSlide(true);
-        }, 0)
-        return;
+      if (index === lastIndex) {
+        console.log("lastIndex")
+
+        const onTransitionComplete =  () => {
+          this.sliderContainer.removeEventListener('transitionend', onTransitionComplete);
+
+          this.currentIndex = firstIndex - 1;
+          this.swipeSlide(false);
+        };
+
+        this.sliderContainer.addEventListener('transitionend', onTransitionComplete);
       }
     }
 
-    this.currentIndex = index;
-    this.updatePagesCount();
-    this.swipeSlide();
   }
 
   swipeSlide(withAnimation = true) {

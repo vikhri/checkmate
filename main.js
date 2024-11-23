@@ -15,7 +15,7 @@ const playersSliderConfig = {
     { width: 1200, slidesPerView: 3 },
   ],
   loop: true,
-  auto: false,
+  auto: true,
   switchingInterval: 4000,
 };
 
