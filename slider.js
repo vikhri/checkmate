@@ -13,7 +13,8 @@ export default class Slider {
     this.pagesContainer = this.slider.querySelector('.pages');
     this.currentPage = this.slider.querySelector('.current-page');
     this.pagesCount = this.slider.querySelector('.pages-count');
-    this.currentIndex = 0;
+    this.currentIndex = 1;
+    this.currentPageNumber = 1;
     this.blockWidth = 0;
 
     // Event Listeners Links
@@ -55,20 +56,21 @@ export default class Slider {
     }
   }
 
-  autoSwipingOn() {
-    if (!this.autoInterval) {
-      this.autoInterval = setInterval(() => {
-        this.moveTo(this.currentIndex + 1);
-      }, this.config.switchingInterval);
-    }
+  goToNext() {
+    this.moveTo(this.currentIndex + 1);
+    this.currentPageNumber += 1;
+    if(this.currentPageNumber > this.slides.length) this.currentPageNumber = 1;
+    this.updatePagesCount();
+
   }
 
-  autoSwipingOff() {
-    if(this.autoInterval) {
-      clearInterval(this.autoInterval);
-      this.autoInterval = null;
-    }
+  goToPrev() {
+    this.moveTo(this.currentIndex - 1);
+    this.currentPageNumber -= 1;
+    if(this.currentPageNumber < 1) this.currentPageNumber = this.slides.length;
+    this.updatePagesCount();
   }
+
 
   init() {
     this.sliderContainer.classList.add('active');
@@ -87,12 +89,8 @@ export default class Slider {
       this.pagesCount.textContent = this.slides.length.toString();
     }
 
-    // Navigation button click handlers
-    this.prevClickHandler = () => this.moveTo(this.currentIndex - 1)
-    this.nextClickHandler = () => this.moveTo(this.currentIndex + 1)
-
-    this.prevButton.addEventListener('click', this.prevClickHandler);
-    this.nextButton.addEventListener('click', this.nextClickHandler);
+    this.prevButton.addEventListener('click', () => this.goToPrev());
+    this.nextButton.addEventListener('click', () => this.goToNext());
 
 
     // // Stop autoswiping while mouse is above the slider
@@ -115,37 +113,47 @@ export default class Slider {
 
         dot.addEventListener('click', () => {
           this.currentIndex = index;
-          this.swipeSlide();
+          this.moveTo(index);
         });
       }
     } else {
       if(!this.config.dots) {
-        this.currentPage.textContent = this.currentIndex.toString()
+        this.currentPage.textContent = this.currentPageNumber.toString()
       }
     }
   }
 
-  moveTo(index, withAnimation = true) {
-    if (this.loop) {
+  moveTo(index) {
+
+    if(this.loop) {
+      const clonesCount = [...this.slider.querySelectorAll('.slide')].length;
+      const lastIndex = clonesCount - this.slidesPerView;
+      const firstIndex = this.slidesPerView
+
       if (index < 0) {
-        this.currentIndex = this.slides.length - 1;
-        this.swipeSlide(false); // Без анимации
-        setTimeout(() => this.moveTo(this.currentIndex - 1), 0); // Переход назад
+        this.currentIndex = this.slides.length;
+        this.swipeSlide(false);
+        setTimeout(() => {
+          this.currentIndex = this.slides.length - 1;
+          this.swipeSlide(true);
+        }, 0)
         return;
       }
-      if (index > this.slides.length) {
-        this.currentIndex = 0;
-        this.swipeSlide(false); // Без анимации
-        setTimeout(() => this.moveTo(this.currentIndex + 1), 0); // Переход вперед
+
+      if (index >= lastIndex) {
+        this.currentIndex = firstIndex - 1;
+        this.swipeSlide(false);
+        setTimeout(() => {
+          this.currentIndex = firstIndex;
+          this.swipeSlide(true);
+        }, 0)
         return;
       }
-    } else {
-      this.currentIndex = Math.max(0, Math.min(index, this.slides.length - this.slidesPerView));
     }
 
     this.currentIndex = index;
     this.updatePagesCount();
-    this.swipeSlide(withAnimation);
+    this.swipeSlide();
   }
 
   swipeSlide(withAnimation = true) {
