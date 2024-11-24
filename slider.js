@@ -58,14 +58,9 @@ export default class Slider {
   }
 
   startAutoSwiping() {
-    // setInterval(() => {
-    //   this.goToNext();
-    // }, this.config.switchingInterval);
-
     this.autoSwipingTimeout = setTimeout(() => {
       this.gotoNextInterval();
     }, this.config.switchingInterval);
-
   }
 
   gotoNextInterval() {
@@ -89,7 +84,6 @@ export default class Slider {
     this.updatePagesCount();
   }
 
-
   init() {
     this.sliderContainer.classList.add('active');
     this.updateSlidesPerView();
@@ -109,14 +103,6 @@ export default class Slider {
 
     this.prevButton.addEventListener('click', () => this.goToPrev());
     this.nextButton.addEventListener('click', () => this.goToNext());
-
-
-    // // Stop autoswiping while mouse is above the slider
-    // this.mouseEnterHandler = () => this.autoSwipingOff();
-    // this.mouseLeaveHandler = () => this.autoSwipingOn();
-    //
-    // this.slider.addEventListener('mouseenter', this.mouseEnterHandler);
-    // this.slider.addEventListener('mouseleave', this.mouseLeaveHandler);
   }
 
   updatePagesCount() {
@@ -142,11 +128,9 @@ export default class Slider {
   }
 
   moveTo(index) {
-
     this.currentIndex = index;
     this.updatePagesCount();
     this.swipeSlide();
-
 
     if(this.loop) {
       const clonesCount = [...this.slider.querySelectorAll('.slide')].length;
@@ -164,8 +148,6 @@ export default class Slider {
       }
 
       if (index === lastIndex) {
-        console.log("lastIndex")
-
         const onTransitionComplete =  () => {
           this.sliderContainer.removeEventListener('transitionend', onTransitionComplete);
 
@@ -176,7 +158,6 @@ export default class Slider {
         this.sliderContainer.addEventListener('transitionend', onTransitionComplete);
       }
     }
-
   }
 
   swipeSlide(withAnimation = true) {
